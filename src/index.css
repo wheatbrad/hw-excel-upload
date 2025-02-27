@@ -1,0 +1,30 @@
+.hw-dropzone {
+  height: 100%;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  border-radius: 16px;
+}
+
+.hw-dropzone--border {
+  border: 2px dashed #8dc74e;
+}
+
+.hw-dropzone--warn {
+  background-color: #e5503933;
+  border: 2px dashed #e55039;
+}
+
+.hw-dropzone--warn p {
+  color: #e55039;
+}
+
+.hw-dropzone--accept {
+  background-color: #8dc74e33;
+  border: 2px dashed #8dc74e;
+}
+
+.hw-dropzone--accept p {
+  color: #8dc74e;
+}

@@ -1,0 +1,128 @@
+import { create } from 'zustand';
+import { DZ_STATE, DZ_EXPECTED_FILE_TYPE } from './constants';
+
+const intialState = {
+  level: DZ_STATE.READY,
+  message: ''
+};
+
+export const useStore = create(() => intialState);
+
+/**
+ * Handle dropzone state change when user first drags element on page.
+ * 
+ * @param {DragEvent} event The dragover event is fired when an element 
+ * or text selection is being dragged over a valid drop target 
+ * (every few hundred milliseconds).
+ */
+export const handleDragOverWindow = (event) => {
+  event.preventDefault();
+  const level = useStore.getState().level;
+
+  if (level === DZ_STATE.PROMPT) {
+    event.dataTransfer.dropEffect = 'none';
+  }
+
+  if (level === DZ_STATE.READY) {
+    useStore.setState({
+      level: DZ_STATE.PROMPT,
+      message: 'Drop Excel (XLSX) file here'
+    }, true);
+  }
+}
+
+/**
+ * Handle dropzone state change when user drags element out 
+ * of browser window.
+ * 
+ * @param {DragEvent} event The dragleave event is fired when 
+ * a dragged element or text selection leaves a valid drop target.
+ */
+export const handleDragLeaveWindow = (event) => {
+  event.preventDefault();
+  useStore.setState(intialState, true);
+}
+
+/**
+ * Handle dropzone state change and POST accepted file to server 
+ * when user drops file on dropzone element.
+ * 
+ * @param {DragEvent} event The drop event is fired when an element 
+ * or text selection is dropped on a valid drop target. To ensure 
+ * that the drop event always fires as expected, you should always 
+ * include a preventDefault() call in the part of your code which 
+ * handles the dragover event.
+ */
+export const handleDrop = (event) => {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'copy';
+
+  if (useStore.getState().level === DZ_STATE.ACCEPT) {
+    alert('Accepted file, uploading...');
+
+    // TODO: will need uploading notice
+    useStore.setState(intialState, true);
+  }
+} 
+
+/**
+ * This method included for completeness.
+ * 
+ * @param {DragEvent} event The dragenter event is fired when a dragged 
+ * element or textselection enters a valid drop target. The target object 
+ * is the immediate user selection (the element directly indicated by the 
+ * user as the drop target), or the `<body>` element.
+ */
+export const handleDragEnter = (event) => {
+  event.preventDefault();
+  // event.dataTransfer.dropEffect = 'none';
+}
+
+/**
+ * Handle dropzone state change when user drags element out of dropzone.
+ * 
+ * @param {DragEvent} event The dragleave event is fired when 
+ * a dragged element or text selection leaves a valid drop target.
+ */
+export const handleDragLeave = (event) => {
+  event.preventDefault();
+
+  useStore.setState({
+    level: DZ_STATE.PROMPT,
+    message: 'Drop file here'
+  }, true);
+}
+
+/**
+ * Handle dropzone state change when user drags element out over dropzone.
+ * 
+ * @param {DragEvent} event The dragover event is fired when an element 
+ * or text selection is being dragged over a valid drop target 
+ * (every few hundred milliseconds).
+ */
+export const handleDragOver = (event) => {
+  event.preventDefault();
+
+  let level = DZ_STATE.ACCEPT;
+  let message = 'Great! Now drop that file.';
+  const dataTransfer = event.dataTransfer;
+  dataTransfer.dropEffect = 'copy';
+
+  // Check to make sure dragged file is acceptable
+  if (dataTransfer.items.length > 1) {
+    level = DZ_STATE.WARN;
+    message = 'One file at a time please.'
+    dataTransfer.dropEffect = 'none';
+  } else if (dataTransfer.items[0].type !== DZ_EXPECTED_FILE_TYPE) {
+    level = DZ_STATE.WARN;
+    message = 'Only accept Excel (XLSX) files.'
+    dataTransfer.dropEffect = 'none';
+  }
+
+  if (useStore.getState().level === DZ_STATE.PROMPT) {
+    useStore.setState({
+      level: level,
+      message: message
+    }, true);
+  }
+}
