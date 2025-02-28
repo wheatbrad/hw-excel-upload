@@ -10,7 +10,7 @@ export const API_ENDPOINT_ROOT = 'https://api.ocozzio.com/homewerks';
 
  * @type {string}
  */
-export const DZ_EXPECTED_FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+export const UPLOAD_EXPECTED_FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 /**
  * Enum defining possible drop zone states:
