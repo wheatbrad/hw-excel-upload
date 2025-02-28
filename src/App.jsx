@@ -3,6 +3,8 @@ import { handleDragOverWindow, handleDragLeaveWindow } from './store';
 import { HomewerksTheme } from './theme';
 import DropZone from './components/DropZone';
 import DropZoneText from './components/DropZoneText';
+import UploadButton from './components/UploadButton';
+import DropZoneMessage from './components/DropZoneMessage';
 
 export default function App() {
   useEffect(() => {
@@ -14,6 +16,8 @@ export default function App() {
     <HomewerksTheme>
       <DropZone>
         <DropZoneText />
+        <UploadButton />
+        <DropZoneMessage />
       </DropZone>
     </HomewerksTheme>
   );
