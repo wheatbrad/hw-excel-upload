@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { DZ_STATE, DZ_EXPECTED_FILE_TYPE } from './constants';
+import { DZ_STATE, UPLOAD_EXPECTED_FILE_TYPE } from './constants';
 
 const intialState = {
   level: DZ_STATE.READY,
-  message: ''
+  message: "\u00A0"
 };
 
 export const useStore = create(() => intialState);
@@ -26,7 +26,7 @@ export const handleDragOverWindow = (event) => {
   if (level === DZ_STATE.READY) {
     useStore.setState({
       level: DZ_STATE.PROMPT,
-      message: 'Drop Excel (XLSX) file here'
+      message: 'Drop file inside the outlined box'
     }, true);
   }
 }
@@ -58,7 +58,8 @@ export const handleDrop = (event) => {
   event.dataTransfer.dropEffect = 'copy';
 
   if (useStore.getState().level === DZ_STATE.ACCEPT) {
-    alert('Accepted file, uploading...');
+    const filename = event.dataTransfer.files[0].name;
+    alert(`Accepted file named ${filename}, uploading...`);
 
     // TODO: will need uploading notice
     useStore.setState(intialState, true);
@@ -89,7 +90,7 @@ export const handleDragLeave = (event) => {
 
   useStore.setState({
     level: DZ_STATE.PROMPT,
-    message: 'Drop file here'
+    message: 'Where you going?! Drop file HERE'
   }, true);
 }
 
@@ -104,18 +105,18 @@ export const handleDragOver = (event) => {
   event.preventDefault();
 
   let level = DZ_STATE.ACCEPT;
-  let message = 'Great! Now drop that file.';
+  let message = 'Great! Now drop that file';
   const dataTransfer = event.dataTransfer;
   dataTransfer.dropEffect = 'copy';
 
   // Check to make sure dragged file is acceptable
   if (dataTransfer.items.length > 1) {
     level = DZ_STATE.WARN;
-    message = 'One file at a time please.'
+    message = 'One file at a time please'
     dataTransfer.dropEffect = 'none';
-  } else if (dataTransfer.items[0].type !== DZ_EXPECTED_FILE_TYPE) {
+  } else if (dataTransfer.items[0].type !== UPLOAD_EXPECTED_FILE_TYPE) {
     level = DZ_STATE.WARN;
-    message = 'Only accept Excel (XLSX) files.'
+    message = 'Must be an Excel file'
     dataTransfer.dropEffect = 'none';
   }
 
@@ -124,5 +125,25 @@ export const handleDragOver = (event) => {
       level: level,
       message: message
     }, true);
+  }
+}
+
+/**
+ * Handle file upload when user clicks file input button.
+ * 
+ * @param {Event} event Change event fired when user explicitly selects 
+ * a file from the file picker.
+ */
+export const handleButtonFileUpload = (event) => {
+  event.preventDefault();
+  const file = event.target.files[0];
+
+  if (file.type !== UPLOAD_EXPECTED_FILE_TYPE) {
+    useStore.setState({
+      level: DZ_STATE.WARN,
+      message: 'Must be an Excel file'
+    }, true);
+  } else {
+    alert(`Accepted file named ${file.name}, uploading...`);
   }
 }
