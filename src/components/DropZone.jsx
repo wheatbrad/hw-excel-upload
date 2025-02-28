@@ -22,7 +22,8 @@ export default function DropZone({ children }) {
       onDrop={handleDrop}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
-      onDragOver={handleDragOver} >
+      onDragOver={handleDragOver}
+    >
       {children}
     </div>
   );
