@@ -6,7 +6,7 @@ const intialState = {
   message: "\u00A0"
 };
 
-export const useStore = create(() => intialState);
+export const useDropZoneStore = create(() => intialState);
 
 /**
  * Handle dropzone state change when user first drags element on page.
@@ -17,14 +17,14 @@ export const useStore = create(() => intialState);
  */
 export const handleDragOverWindow = (event) => {
   event.preventDefault();
-  const level = useStore.getState().level;
+  const level = useDropZoneStore.getState().level;
 
   if (level === DZ_STATE.PROMPT) {
     event.dataTransfer.dropEffect = 'none';
   }
 
   if (level === DZ_STATE.READY) {
-    useStore.setState({
+    useDropZoneStore.setState({
       level: DZ_STATE.PROMPT,
       message: 'Drop file inside the outlined box'
     }, true);
@@ -40,7 +40,7 @@ export const handleDragOverWindow = (event) => {
  */
 export const handleDragLeaveWindow = (event) => {
   event.preventDefault();
-  useStore.setState(intialState, true);
+  useDropZoneStore.setState(intialState, true);
 }
 
 /**
@@ -57,12 +57,12 @@ export const handleDrop = (event) => {
   event.preventDefault();
   event.dataTransfer.dropEffect = 'copy';
 
-  if (useStore.getState().level === DZ_STATE.ACCEPT) {
+  if (useDropZoneStore.getState().level === DZ_STATE.ACCEPT) {
     const filename = event.dataTransfer.files[0].name;
     alert(`Accepted file named ${filename}, uploading...`);
 
     // TODO: will need uploading notice
-    useStore.setState(intialState, true);
+    useDropZoneStore.setState(intialState, true);
   }
 } 
 
@@ -88,7 +88,7 @@ export const handleDragEnter = (event) => {
 export const handleDragLeave = (event) => {
   event.preventDefault();
 
-  useStore.setState({
+  useDropZoneStore.setState({
     level: DZ_STATE.PROMPT,
     message: 'Where you going?! Drop file HERE'
   }, true);
@@ -120,8 +120,8 @@ export const handleDragOver = (event) => {
     dataTransfer.dropEffect = 'none';
   }
 
-  if (useStore.getState().level === DZ_STATE.PROMPT) {
-    useStore.setState({
+  if (useDropZoneStore.getState().level === DZ_STATE.PROMPT) {
+    useDropZoneStore.setState({
       level: level,
       message: message
     }, true);
@@ -139,7 +139,7 @@ export const handleButtonFileUpload = (event) => {
   const file = event.target.files[0];
 
   if (file.type !== UPLOAD_EXPECTED_FILE_TYPE) {
-    useStore.setState({
+    useDropZoneStore.setState({
       level: DZ_STATE.WARN,
       message: 'Must be an Excel file'
     }, true);

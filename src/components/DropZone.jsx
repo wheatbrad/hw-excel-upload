@@ -1,5 +1,5 @@
 import { 
-  useStore,
+  useDropZoneStore,
   handleDragEnter,
   handleDragLeave,
   handleDragOver,
@@ -14,7 +14,7 @@ const statefulCSSClasses = [
 ];
 
 export default function DropZone({ children }) {
-  const level = useStore(state => state.level);
+  const level = useDropZoneStore(state => state.level);
 
   return (
     <div
