@@ -1,16 +1,14 @@
 import { 
   useDropZoneStore,
-  handleDragEnter,
-  handleDragLeave,
-  handleDragOver,
-  handleDrop
+  handleDragOverZone,
+  handleDropInZone
 } from '../store';
 
 const statefulCSSClasses = [
   'hw-dropzone',
   'hw-dropzone hw-dropzone--border',
-  'hw-dropzone hw-dropzone--accept',
-  'hw-dropzone hw-dropzone--warn'
+  'hw-dropzone hw-dropzone--warn',
+  'hw-dropzone hw-dropzone--accept'
 ];
 
 export default function DropZone({ children }) {
@@ -19,10 +17,8 @@ export default function DropZone({ children }) {
   return (
     <div
       className={statefulCSSClasses[level]}
-      onDrop={handleDrop}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      onDragOver={handleDragOver}
+      onDrop={handleDropInZone}
+      onDragOver={handleDragOverZone}
     >
       {children}
     </div>
