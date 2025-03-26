@@ -16,6 +16,10 @@ const initialState = {
 
 export const useDropZoneStore = create(() => initialState);
 
+export const resetDropZoneStore = () => {
+  useDropZoneStore.setState(initialState, true);
+}
+
 /**
  * Handle dropzone state change when user drags element on / over page.
  * 
@@ -38,7 +42,6 @@ export const handleDragOver = (event) => {
       event.dataTransfer.dropEffect = 'copy';
       useDropZoneStore.setState(acceptableFile);
     }
-    
   } else {
     // Not in drop zone, prompt user to drag into zone
     event.dataTransfer.dropEffect = 'none';
@@ -60,7 +63,7 @@ export const handleDragLeave = (event) => {
     event.target === document.body ||
     event.target === document.documentElement
   ) {
-    useDropZoneStore.setState(initialState, true);
+    resetDropZoneStore();
   }
 }
 
@@ -91,11 +94,8 @@ export const handleDrop = (event) => {
       message: '',
       file: event.dataTransfer.files[0]
     }, true);
-    alert('Uploading ' + event.dataTransfer.files[0].name);
   }
-  
 }
-
 
 /**
  * Handle file upload when user clicks file input button.
@@ -115,7 +115,5 @@ export const handleButtonFileUpload = (event) => {
       message: '',
       file: file
     }, true);
-
-    alert('Uploading ' + file.name);
   }
 }
