@@ -1,9 +1,14 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 
-export const theme = createTheme({
+const colorMain = '#8dc74e';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: ['Open Sans', 'Arial', 'sans-serif']
+  },
   palette: {
     primary: {
-      main: '#8dc74e',
+      main: colorMain
       // contrastText: '#fff'
     },
     secondary: {
@@ -11,26 +16,35 @@ export const theme = createTheme({
       contrastText: '#fff'
     }
   },
-  // components: {
-  //   MuiTextField: {
-  //     styleOverrides: {
-  //       root: {
-  //         '& label.Mui-focused': {
-  //           color: 'inherit'
-  //         }
-  //       }
-  //     }
-  //   },
-  //   MuiInputLabel: {
-  //     styleOverrides: {
-  //       root: {
-  //         '&.Mui-focused': {
-  //           color: 'inherit'
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& label.Mui-focused': {
+            color: 'inherit'
+          }
+        }
+      }
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focused': {
+            color: 'inherit'
+          }
+        }
+      }
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          fontWeight: 'bold',
+          textAlign: 'center',
+          color: colorMain
+        }
+      }
+    }
+  }
 });
 
 export function HomewerksTheme({ children }) {
