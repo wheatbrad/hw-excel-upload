@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { UPLOAD_EXPECTED_FILE_TYPE } from './constants';
+import { API_ENDPOINT_ROOT, MSG_CODE, UPLOAD_EXPECTED_FILE_TYPE } from './constants';
 import {
   acceptableFile,
   highlightDropzone,
@@ -11,7 +11,9 @@ import {
 const initialState = {
   style: 'hw-dropzone',
   message: "\u00A0",
-  file: null
+  showConfirmDialog: false,
+  file: null,
+  filename: ''
 };
 
 export const useDropZoneStore = create(() => initialState);
@@ -89,11 +91,15 @@ export const handleDrop = (event) => {
     useDropZoneStore.setState(warnUnacceptableFile);
   } else {
     // Have a valid file
+    const file = event.dataTransfer.files[0];
     useDropZoneStore.setState({
       style: 'hw-dropzone hw-dropzone--accept',
       message: '',
-      file: event.dataTransfer.files[0]
+      file: file,
+      filename: file.name.replace(/\.[^/.]+$/, '')
     }, true);
+
+    postFileForValidation(file);
   }
 }
 
@@ -113,7 +119,94 @@ export const handleButtonFileUpload = (event) => {
     useDropZoneStore.setState({
       style: 'hw-dropzone hw-dropzone--accept',
       message: '',
-      file: file
+      file: file,
+      filename: file.name.replace(/\.[^/.]+$/, '')
     }, true);
+
+    postFileForValidation(file);
   }
+}
+
+/**
+ * Handle text changes from MUI TextField component.
+ * 
+ * @param {React.ChangeEvent<HTMLInputElement>} event 
+ */
+export const handleFilenameChange = (event) => {
+  useDropZoneStore.setState(state => ({
+    ...state,
+    filename: event.target.value
+  }));
+}
+
+/**
+ * POST accepted Excel file to server for validation.
+ * 
+ * @param {File} file File (XLSX Spreadsheet) uploaded by user.
+ */
+const postFileForValidation = (file) => {
+  const formData = new FormData();
+  formData.append('xlsx', file);
+  formData.append('validation', JSON.stringify(
+    {
+      'headings': [{'B1': 'HWW Model #'}],
+      'data': [['B2']]
+    }
+  ));
+
+  fetch(`${API_ENDPOINT_ROOT}/excel/validate`, {
+    method: 'POST',
+    mode: 'cors',
+    body: formData
+  })
+  .then(response => {
+    if (response.ok) return response.json();
+
+    throw new Error(`Response status: ${response.status}`);
+  })
+  .then(json => {
+    if (json.isValid) {
+      useDropZoneStore.setState(state => ({
+        ...state,
+        showConfirmDialog: true
+      }));
+      console.log(json);
+    } else {
+      useDropZoneStore.setState(state => ({
+        ...state,
+        style: 'hw-dropzone hw-dropzone--warn',
+        message: MSG_CODE[json.message]
+      }));
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
+
+export const postFileForProcessing = () => {
+  const { file, filename } = useDropZoneStore.getState();
+  const formData = new FormData();
+  formData.append('xlsx', file, filename);
+  
+  // TODO: check this endpoint
+  fetch(`${API_ENDPOINT_ROOT}/excel/process`, {
+    method: 'POST',
+    mode: 'cors',
+    body: formData
+  })
+  .then(response => {
+    if (response.ok) return response.json();
+
+    throw new Error(`Response status: ${response.status}`);
+  })
+  .then(json => {
+    // TODO: handle file download
+  })
+  .catch(error => {
+    console.error(error);
+  })
+  .finally(
+    // TODO: remove "loading" state from UI
+  )
 }

@@ -1,3 +1,5 @@
+import { Msg } from './constants';
+
 /**
  * Determines if target element from event is within 
  * the bounds of defined drop target.
@@ -27,7 +29,7 @@ export function warnMultipleFiles(state) {
   return {
     ...state,
     style: 'hw-dropzone hw-dropzone--warn',
-    message: 'One file at a time please'
+    message: Msg.MULTIPLE_FILES
   };
 }
 
@@ -42,7 +44,7 @@ export function warnUnacceptableFile(state) {
   return {
     ...state,
     style: 'hw-dropzone hw-dropzone--warn',
-    message: 'Must be an Excel file'
+    message: Msg.UNACCEPTABLE_FILE
   };
 }
 
@@ -57,7 +59,7 @@ export function acceptableFile(state) {
   return {
     ...state,
     style: 'hw-dropzone hw-dropzone--accept',
-    message: 'Great! Drop that file'
+    message: Msg.VALID
   };
 }
 
@@ -72,6 +74,6 @@ export function highlightDropzone(state) {
   return {
     ...state,
     style: 'hw-dropzone hw-dropzone--border',
-    message: 'Drag file into the outlined area'
+    message: Msg.NOT_IN_ZONE
   };
 }
