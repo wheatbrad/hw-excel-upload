@@ -17,12 +17,22 @@ const theme = createTheme({
     }
   },
   components: {
-    MuiTextField: {
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
       styleOverrides: {
         root: {
-          '& label.Mui-focused': {
-            color: 'inherit'
-          }
+          paddingTop: '8px'
+        }
+      }
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          fontWeight: 'bold',
+          textAlign: 'center',
+          color: colorMain
         }
       }
     },
@@ -35,12 +45,12 @@ const theme = createTheme({
         }
       }
     },
-    MuiDialogTitle: {
+    MuiTextField: {
       styleOverrides: {
         root: {
-          fontWeight: 'bold',
-          textAlign: 'center',
-          color: colorMain
+          '& label.Mui-focused': {
+            color: 'inherit'
+          }
         }
       }
     }
