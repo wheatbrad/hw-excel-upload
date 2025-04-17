@@ -5,6 +5,8 @@ import DropZone from './components/DropZone';
 import DropZoneText from './components/DropZoneText';
 import UploadButton from './components/UploadButton';
 import DropZoneMessage from './components/DropZoneMessage';
+import UploadDialog from './components/UploadDialog';
+import UploadDialogContent from './components/UploadDialogContent';
 
 export default function App() {
   useEffect(() => {
@@ -14,6 +16,9 @@ export default function App() {
 
   return (
     <HomewerksTheme>
+      <UploadDialog>
+        <UploadDialogContent />
+      </UploadDialog>
       <DropZone>
         <DropZoneText />
         <UploadButton />
