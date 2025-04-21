@@ -7,6 +7,7 @@ import UploadButton from './components/UploadButton';
 import DropZoneMessage from './components/DropZoneMessage';
 import UploadDialog from './components/UploadDialog';
 import UploadDialogContent from './components/UploadDialogContent';
+import Processing from './components/Processing';
 
 export default function App() {
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function App() {
         <UploadButton />
         <DropZoneMessage />
       </DropZone>
+      <Processing />
     </HomewerksTheme>
   );
 }
