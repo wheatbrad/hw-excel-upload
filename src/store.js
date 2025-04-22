@@ -12,6 +12,7 @@ const initialState = {
   style: 'hw-dropzone',
   message: "\u00A0",
   showConfirmDialog: false,
+  showProcessing: false,
   file: null,
   filename: ''
 };
@@ -19,7 +20,7 @@ const initialState = {
 export const useDropZoneStore = create(() => initialState);
 
 export const resetDropZoneStore = () => {
-  useDropZoneStore.setState(initialState, true);
+  useDropZoneStore.setState({ ...initialState }, true);
 }
 
 /**
@@ -92,12 +93,13 @@ export const handleDrop = (event) => {
   } else {
     // Have a valid file
     const file = event.dataTransfer.files[0];
-    useDropZoneStore.setState({
+    useDropZoneStore.setState(state => ({
+      ...state,
       style: 'hw-dropzone hw-dropzone--accept',
       message: '',
       file: file,
       filename: file.name.replace(/\.[^/.]+$/, '')
-    }, true);
+    }));
 
     postFileForValidation(file);
   }
@@ -119,6 +121,8 @@ export const handleButtonFileUpload = (event) => {
     useDropZoneStore.setState({
       style: 'hw-dropzone hw-dropzone--accept',
       message: '',
+      showConfirmDialog: false,
+      showProcessing: false,
       file: file,
       filename: file.name.replace(/\.[^/.]+$/, '')
     }, true);
@@ -170,7 +174,6 @@ const postFileForValidation = (file) => {
         ...state,
         showConfirmDialog: true
       }));
-      console.log(json);
     } else {
       useDropZoneStore.setState(state => ({
         ...state,
@@ -185,28 +188,44 @@ const postFileForValidation = (file) => {
 }
 
 export const postFileForProcessing = () => {
+  useDropZoneStore.setState(state => ({
+    ...state,
+    showConfirmDialog: false,
+    showProcessing: true
+  }))
   const { file, filename } = useDropZoneStore.getState();
   const formData = new FormData();
   formData.append('xlsx', file, filename);
   
-  // TODO: check this endpoint
   fetch(`${API_ENDPOINT_ROOT}/excel/process`, {
     method: 'POST',
     mode: 'cors',
     body: formData
   })
   .then(response => {
-    if (response.ok) return response.json();
+    if (response.ok) return response.blob();
 
     throw new Error(`Response status: ${response.status}`);
   })
-  .then(json => {
-    // TODO: handle file download
+  .then(blob => {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.style.display = 'none';
+
+    // Append and click
+    document.body.appendChild(link);
+    link.click();
+    
+    // Clean up
+    setTimeout(() => document.body.removeChild(link), 0);
+    URL.revokeObjectURL(url);
   })
   .catch(error => {
     console.error(error);
   })
   .finally(
-    // TODO: remove "loading" state from UI
-  )
+    resetDropZoneStore
+  );
 }
