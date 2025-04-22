@@ -10,12 +10,19 @@
   background-color: #f1f2f2;
 }
 
+.hw-dropzone h2 {
+  font-weight: bold;
+  color: rgb(var(--color-primary));
+}
+
 .hw-dropzone p {
   margin: 8px 0;
+  text-align: center;
 }
 
 .hw-dropzone a {
   color: initial;
+  text-decoration: underline;
 }
 
 .hw-dropzone p:last-of-type {
