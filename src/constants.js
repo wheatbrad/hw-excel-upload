@@ -3,7 +3,7 @@
  * 
  * @var {string}
  */
-export const API_ENDPOINT_ROOT = 'https://api.ocozzio.test/homewerks';
+export const API_ENDPOINT_ROOT = 'https://api.ocozzio.com/homewerks';
 
 /**
  * File type user is expected to upload.
