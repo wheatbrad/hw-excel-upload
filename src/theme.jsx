@@ -17,6 +17,13 @@ const theme = createTheme({
     }
   },
   components: {
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          zIndex: 9999
+        }
+      }
+    },
     MuiButton: {
       defaultProps: {
         disableElevation: true,
