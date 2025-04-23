@@ -7,7 +7,9 @@ export default function UploadDialogContent() {
 
   return (
     <>
-      <p>Select a retailer from the list below:</p>
+      <p style={{ marginBottom: '16px' }}>
+        Select a retailer from the list below:
+      </p>
       <FormControl fullWidth>
         <InputLabel size='small' id='hw-retailer-select'>Select Retailer</InputLabel>
         <Select
@@ -36,7 +38,7 @@ export default function UploadDialogContent() {
           <MenuItem value='Wayfair'>Wayfair</MenuItem>
         </Select>
       </FormControl>
-      <p style={{ marginTop: '30px' }}>
+      <p style={{ margin: '30px 0 16px 0' }}>
         You may optionally change the name of the file that will be downloaded by modifying the file name in the field below:
       </p>
       <TextField 
