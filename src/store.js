@@ -14,7 +14,8 @@ const initialState = {
   showConfirmDialog: false,
   showProcessing: false,
   file: null,
-  filename: ''
+  filename: '',
+  retailerId: 'Ace',
 };
 
 export const useDropZoneStore = create(() => initialState);
@@ -118,14 +119,15 @@ export const handleButtonFileUpload = (event) => {
   if (file.type !== UPLOAD_EXPECTED_FILE_TYPE) {
     useDropZoneStore.setState(warnUnacceptableFile);
   } else {
-    useDropZoneStore.setState({
+    useDropZoneStore.setState(state => ({
+      ...state,
       style: 'hw-dropzone hw-dropzone--accept',
       message: '',
       showConfirmDialog: false,
       showProcessing: false,
       file: file,
       filename: file.name.replace(/\.[^/.]+$/, '')
-    }, true);
+    }));
 
     postFileForValidation(file);
   }
@@ -153,8 +155,8 @@ const postFileForValidation = (file) => {
   formData.append('xlsx', file);
   formData.append('validation', JSON.stringify(
     {
-      'headings': [{'B1': 'HWW Model #'}],
-      'data': [['B2']]
+      'headings': [{'A1': 'Customer SKU #'}],
+      'data': [['A2']]
     }
   ));
 
@@ -192,10 +194,13 @@ export const postFileForProcessing = () => {
     ...state,
     showConfirmDialog: false,
     showProcessing: true
-  }))
-  const { file, filename } = useDropZoneStore.getState();
+  }));
+  const { file, filename, retailerId } = useDropZoneStore.getState();
   const formData = new FormData();
-  formData.append('xlsx', file, filename);
+  formData.append('type', 'sku');
+  formData.append('xlsx', file);
+  formData.append('filename', filename);
+  formData.append('retailerId', retailerId);
   
   fetch(`${API_ENDPOINT_ROOT}/excel/process`, {
     method: 'POST',
@@ -229,3 +234,15 @@ export const postFileForProcessing = () => {
     resetDropZoneStore
   );
 }
+
+/**
+ * Handle retailer selection.
+ * 
+ * @param {EventTarget} target Node from which change event was emitted.
+ */
+export const handleRetailerChange = ({ target }) => {
+  useDropZoneStore.setState(state => ({
+    ...state,
+    retailerId: target.value
+  }));
+};
