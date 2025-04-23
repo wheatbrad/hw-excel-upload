@@ -195,7 +195,8 @@ export const postFileForProcessing = () => {
   }))
   const { file, filename } = useDropZoneStore.getState();
   const formData = new FormData();
-  formData.append('xlsx', file, filename);
+  formData.append('xlsx', file);
+  formData.append('filename', filename);
   
   fetch(`${API_ENDPOINT_ROOT}/excel/process`, {
     method: 'POST',
