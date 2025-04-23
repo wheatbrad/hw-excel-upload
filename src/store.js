@@ -195,6 +195,7 @@ export const postFileForProcessing = () => {
   }))
   const { file, filename } = useDropZoneStore.getState();
   const formData = new FormData();
+  formData.append('type', 'basic');
   formData.append('xlsx', file);
   formData.append('filename', filename);
   
