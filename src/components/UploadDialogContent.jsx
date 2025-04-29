@@ -20,7 +20,7 @@ export default function UploadDialogContent() {
           onChange={handleRetailerChange}>
           <MenuItem value='Ace'>Ace Hardware</MenuItem>
           <MenuItem value='Amazon'>Amazon</MenuItem>
-          <MenuItem value="Blan's ID">Blain's Farm and Fleet</MenuItem>
+          <MenuItem value="Blain's ID">Blain's Farm and Fleet</MenuItem>
           <MenuItem value='DIB'>Do It Best</MenuItem>
           <MenuItem value='EL ID'>E.L. Mustee</MenuItem>
           {/* <MenuItem value=''>Horizon</MenuItem> */}
