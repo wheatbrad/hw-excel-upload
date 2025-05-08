@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
-createRoot(document.getElementById('hw-excel-upload')).render(
+createRoot(document.getElementById('hw-model-number-upload')).render(
   <StrictMode>
     <App />
   </StrictMode>
