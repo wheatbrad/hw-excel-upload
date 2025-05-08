@@ -5,9 +5,9 @@ export default function DropZoneText() {
   return (
     <>
       <h1>Upload Excel File</h1>
-      <h2>Customer SKU Number</h2>
+      <h2>Item Number Lookup</h2>
       <p>Click the button provided below or drag an Excel file into this area to upload an Excel template to be populated with data. You will be asked to indicate the retailer associated with the SKU numbers in the Excel document.</p>
-      <p>The file must be a <a href="https://learn.microsoft.com/en-us/openspecs/office_standards/ms-xlsx/2c5dee00-eff2-4b22-92b6-0738acd4475e" target='_blank' rel='noopener noreferrer'>Microsoft Excel Open XML</a> (XLSX) having the text <em>Customer SKU #</em> as the header in column A. Exact formatting is defined in the template available <a href ={`${API_ENDPOINT_ROOT}/download/excel/template/hw-customer-sku-template`}><strong>here</strong></a>.</p>
+      <p>The file must be a <a href="https://learn.microsoft.com/en-us/openspecs/office_standards/ms-xlsx/2c5dee00-eff2-4b22-92b6-0738acd4475e" target='_blank' rel='noopener noreferrer'>Microsoft Excel Open XML</a> (XLSX) having the text <em>Customer SKU #</em> as the header in column A. Exact formatting is defined in the template available <a href ={`${API_ENDPOINT_ROOT}/download/excel/template/hw-item-number-template`}><strong>here</strong></a>.</p>
     </>
   );
 }
